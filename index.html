@@ -25,6 +25,7 @@
     --sky-deep: #214582;   /* accent hover */
     --sky-soft: #D9E1EF;   /* accent muted */
     --theme-color-meta: #F5F1E8;
+    --header-bg: rgba(245, 241, 232, 0.9); /* bone translucent */
   }
   :root[data-theme="dark"] {
     /* Carter Design System — dark mode — brown-900 surface, bone text, lifted blue accent */
@@ -41,6 +42,7 @@
     --sky-deep: #89A9DF;   /* lighter on hover */
     --sky-soft: #24345A;   /* deep muted blue for pill fills */
     --theme-color-meta: #1A1310;
+    --header-bg: rgba(26, 19, 16, 0.9); /* brown-900 translucent */
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -74,12 +76,12 @@
   header {
     padding: 16px 0;
     border-bottom: 1px solid var(--line);
-    background: var(--bg);
     position: sticky;
     top: 0;
     z-index: 20;
     backdrop-filter: blur(8px);
-    background: rgba(245, 241, 232, 0.9);
+    background: var(--header-bg);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
   }
   header .wrap {
     display: flex;
