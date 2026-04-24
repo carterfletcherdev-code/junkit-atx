@@ -10,8 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    /* Carter Design System — Bone surface + Brown text + Bone & Blue accent */
+  :root, :root[data-theme="light"] {
+    /* Carter Design System — light mode — Bone surface + Brown text + Bone & Blue accent */
     --bg: #F5F1E8;         /* bone */
     --bg-card: #F5EFE6;    /* brown-50 */
     --bg-raised: #F5EFE6;  /* brown-50 */
@@ -21,10 +21,26 @@
     --ink-faint: #9C7A5C;  /* brown-400 — muted text */
     --line: #E8DDC8;       /* brown-100 — borders */
     --line-strong: #D4C2A0;/* brown-200 */
-    /* Bone & Blue accent — preset #3 */
-    --sky: #2F5AA8;        /* base */
-    --sky-deep: #214582;   /* hover */
-    --sky-soft: #D9E1EF;   /* muted */
+    --sky: #2F5AA8;        /* accent base */
+    --sky-deep: #214582;   /* accent hover */
+    --sky-soft: #D9E1EF;   /* accent muted */
+    --theme-color-meta: #F5F1E8;
+  }
+  :root[data-theme="dark"] {
+    /* Carter Design System — dark mode — brown-900 surface, bone text, lifted blue accent */
+    --bg: #1A1310;         /* brown-900 */
+    --bg-card: #2A1F15;    /* brown-800 */
+    --bg-raised: #2A1F15;  /* brown-800 */
+    --ink: #F5F1E8;        /* bone — primary text */
+    --ink-soft: #E8DDC8;   /* brown-100 */
+    --ink-dim: #D4C2A0;    /* brown-200 — secondary text */
+    --ink-faint: #9C7A5C;  /* brown-400 — muted text (shared) */
+    --line: #3E2E20;       /* brown-700 */
+    --line-strong: #5C4430;/* brown-600 */
+    --sky: #6B92D4;        /* lifted blue for dark bg */
+    --sky-deep: #89A9DF;   /* lighter on hover */
+    --sky-soft: #24345A;   /* deep muted blue for pill fills */
+    --theme-color-meta: #1A1310;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
@@ -37,6 +53,7 @@
     text-rendering: optimizeLegibility;
     min-height: 100dvh;
     overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
   h1, h2, h3 {
     font-family: 'Archivo Black', sans-serif;
@@ -94,6 +111,39 @@
   }
   .call-pill:hover, .call-pill:active { background: var(--sky-deep); }
   .call-pill svg { width: 14px; height: 14px; }
+  .header-right { display: inline-flex; align-items: center; gap: 8px; }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .theme-toggle:hover, .theme-toggle:active {
+    border-color: var(--ink);
+    background: var(--bg-card);
+  }
+  .theme-toggle svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+  .theme-toggle .icon-moon,
+  .theme-toggle .label-dark { display: inline-flex; }
+  .theme-toggle .icon-sun,
+  .theme-toggle .label-light { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-moon,
+  [data-theme="dark"] .theme-toggle .label-dark { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-sun,
+  [data-theme="dark"] .theme-toggle .label-light { display: inline-flex; }
+  @media (max-width: 480px) {
+    .theme-toggle .theme-toggle-label { display: none; }
+    .theme-toggle { padding: 7px 9px; }
+  }
 
   /* ===== HERO ===== */
   .hero {
@@ -535,6 +585,18 @@
     .action-btn { font-size: 15px; padding: 16px 18px; }
   }
 </style>
+<script>
+  (function() {
+    var root = document.documentElement;
+    var saved = null;
+    try { saved = localStorage.getItem('theme'); } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var theme = saved || (prefersDark ? 'dark' : 'light');
+    root.setAttribute('data-theme', theme);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#1A1310' : '#F5F1E8');
+  })();
+</script>
 </head>
 <body>
 
@@ -542,10 +604,17 @@
 <header>
   <div class="wrap">
     <div class="brand">JUNK IT <span class="atx">ATX</span></div>
-    <a href="tel:+15124971627" class="call-pill">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-      Call Now
-    </a>
+    <div class="header-right">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle light and dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <span class="theme-toggle-label"><span class="label-dark">Dark Mode</span><span class="label-light">Light Mode</span></span>
+      </button>
+      <a href="tel:+15124971627" class="call-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+        Call Now
+      </a>
+    </div>
   </div>
 </header>
 
@@ -703,6 +772,15 @@
   });
 
   document.getElementById('year').textContent = new Date().getFullYear();
+
+  document.getElementById('themeToggle').addEventListener('click', function() {
+    var root = document.documentElement;
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', next === 'dark' ? '#1A1310' : '#F5F1E8');
+  });
 </script>
 
 </body>
